@@ -5,7 +5,6 @@ class ApplicationController < ActionController::API
 
   def authorize
     @headers = request.headers
-
     if @headers['Authorization'].present?
       token = @headers['Authorization'].split(' ').last
 
@@ -13,9 +12,9 @@ class ApplicationController < ActionController::API
 
       @current_user = User.find_by(id: decoded_token[:user_id])
 
-      render json: { error: 'Not authorized.' }, status: 401 unless @current_user
+      render json: { error: 'Not Authorized' }, status: 401 unless @current_user
     else
-      render json: { error: 'Not authorized.' }, status: 401
+      render json: { error: 'Not Authorized' }, status: 401
     end
   end
 
@@ -28,7 +27,7 @@ class ApplicationController < ActionController::API
   end
 
   def decode(token)
-    body = JWT.encode(token, '<%= ENV["JWT_SECRET"] %>')[0]
+    body = JWT.decode(token, '<%= ENV["JWT_SECRET"] %>')[0]
     HashWithIndifferentAccess.new body
   rescue StandardError
     nil
