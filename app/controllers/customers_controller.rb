@@ -1,6 +1,10 @@
 class CustomersController < ApplicationController
   before_action :authorize
-  before_action :load_customer, only: [:update]
+  before_action :load_customer, only: %i[show update]
+
+  def show
+    render json: @customer
+  end
 
   def create
     @customer = Customer.create(customer_params)
@@ -25,6 +29,8 @@ class CustomersController < ApplicationController
 
   def load_customer
     @customer = Customer.find(params[:id])
+  rescue StandardError
+    render json: { error: 'This user not exits.' }, status: :bad_request
   end
 
   def customer_params
