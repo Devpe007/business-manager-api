@@ -1,6 +1,6 @@
 class ProductsController < ApplicationController
   before_action :authorize
-  before_action :load_product, only: %i[show update]
+  before_action :load_product, only: %i[show update destroy]
 
   def index
     @products = Product.where(user_id: current_user.id)
@@ -29,6 +29,12 @@ class ProductsController < ApplicationController
     else
       render json: @product.erros, status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    @product.destroy
+
+    render json: { message: 'Product destroyed successfully.' }, status: :accepted
   end
 
   private
