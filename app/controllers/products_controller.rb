@@ -1,6 +1,10 @@
 class ProductsController < ApplicationController
   before_action :authorize
-  before_action :load_product, only: [:update]
+  before_action :load_product, only: %i[show update]
+
+  def show
+    render json: @product
+  end
 
   def create
     @product = Product.create(product_params)
