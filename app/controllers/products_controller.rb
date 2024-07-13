@@ -2,6 +2,12 @@ class ProductsController < ApplicationController
   before_action :authorize
   before_action :load_product, only: %i[show update]
 
+  def index
+    @products = Product.where(user_id: current_user.id)
+
+    render json: @products
+  end
+
   def show
     render json: @product
   end
