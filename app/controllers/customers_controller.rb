@@ -1,6 +1,6 @@
 class CustomersController < ApplicationController
   before_action :authorize
-  before_action :load_customer, only: %i[show update]
+  before_action :load_customer, only: %i[show update destroy]
 
   def index
     @customers = Customer.where(user_id: current_user.id)
@@ -29,6 +29,12 @@ class CustomersController < ApplicationController
     else
       render json: @customer.erros, status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    @customer.destroy
+
+    render json: { message: 'Customer destroyed successfully.' }, status: :accepted
   end
 
   private
