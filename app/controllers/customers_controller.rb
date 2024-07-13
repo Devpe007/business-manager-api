@@ -2,6 +2,12 @@ class CustomersController < ApplicationController
   before_action :authorize
   before_action :load_customer, only: %i[show update]
 
+  def index
+    @customers = Customer.where(user_id: current_user.id)
+
+    render json: @customers
+  end
+
   def show
     render json: @customer
   end
