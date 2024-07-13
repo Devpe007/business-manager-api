@@ -42,7 +42,7 @@ class CustomersController < ApplicationController
   def load_customer
     @customer = Customer.find(params[:id])
   rescue StandardError
-    render json: { error: 'This user not exits.' }, status: :bad_request
+    render json: { error: 'This customer does not exits.' }, status: :bad_request
   end
 
   def customer_params
