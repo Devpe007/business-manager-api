@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
 
       render json: user.as_json(except: %i[password_digest created_at updated_at]).merge({ token: }), status: :ok
     else
-      render json: { error: 'An Error Happened.' }
+      render json: { error: 'Email/Password incorrect.' }, status: :bad_request
     end
   end
 end
