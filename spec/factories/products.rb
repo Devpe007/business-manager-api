@@ -5,5 +5,6 @@ FactoryBot.define do
     cost { 15 }
     quantity { 200 }
     inventory { true }
+    association :user
   end
 end
