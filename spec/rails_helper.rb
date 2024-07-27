@@ -9,6 +9,10 @@ require 'rspec/rails'
 
 require 'support/factory_bot'
 
+require 'simplecov'
+
+SimpleCov.start
+
 rails_support_path = Rails.root.join('spec', 'support', '**', '*.rb')
 Dir[rails_support_path].each { |file| require file }
 
