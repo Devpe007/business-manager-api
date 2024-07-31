@@ -27,7 +27,7 @@ class CustomersController < ApplicationController
     if @customer.update(customer_params)
       render json: @customer, status: :accepted
     else
-      render json: @customer.erros, status: :unprocessable_entity
+      render json: @customer.errors, status: :unprocessable_entity
     end
   end
 
