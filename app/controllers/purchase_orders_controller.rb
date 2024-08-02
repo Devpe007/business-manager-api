@@ -1,5 +1,5 @@
 class PurchaseOrdersController < ApplicationController
-  before_action :load_purchase_order, only: [:update]
+  before_action :load_purchase_order, only: %i[update destroy]
 
   def create
     @purchase_order = PurchaseOrder.create(purchase_order_params)
@@ -19,6 +19,12 @@ class PurchaseOrdersController < ApplicationController
     else
       render json: @purchase_order.errors, status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    @purchase_order.destroy
+
+    render json: { message: 'Purchase order destroyed successfully.' }, status: :accepted
   end
 
   private
