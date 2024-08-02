@@ -41,9 +41,15 @@ group :development, :test do
   gem 'debug', platforms: %i[mri windows]
 
   gem 'dotenv'
+  gem 'factory_bot_rails'
+  gem 'ffaker'
+  gem 'pry'
+  gem 'rspec-rails'
 end
 
 group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
 end
+
+gem 'simplecov', require: false, group: :test
