@@ -1,5 +1,15 @@
 class PurchaseOrdersController < ApplicationController
-  before_action :load_purchase_order, only: %i[update destroy]
+  before_action :load_purchase_order, only: %i[show update destroy]
+
+  def index
+    @purchase_orders = PurchaseOrder.where(user_id: current_user.id)
+
+    render json: @purchase_orders
+  end
+
+  def show
+    render json: @purchase_order
+  end
 
   def create
     @purchase_order = PurchaseOrder.create(purchase_order_params)
@@ -32,7 +42,7 @@ class PurchaseOrdersController < ApplicationController
   def load_purchase_order
     @purchase_order = PurchaseOrder.find(params[:id])
   rescue StandardError
-    render json: { message: 'This purchase_order does not exists.' }, status: :bad_request
+    render json: { message: 'This purchase order does not exists.' }, status: :bad_request
   end
 
   def purchase_order_params
