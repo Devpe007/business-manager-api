@@ -5,6 +5,9 @@ Rails.application.routes.draw do
 
   resources :customers
   resources :products
+  resources :purchase_orders
+  post '/purchase_orders/:customer_id', to: 'purchase_orders#create'
+  put '/purchase_orders/:customer_id/:id', to: 'purchase_orders#update'
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
