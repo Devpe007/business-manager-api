@@ -93,4 +93,33 @@ RSpec.describe PurchaseOrdersController, type: :controller do
       end
     end
   end
+
+  describe 'DELETE #destroy' do
+    let(:purchase_order) { create(:purchase_order) }
+
+    before do
+      request.headers.merge!(valid_headers)
+
+      delete :destroy, params: { id: purchase_order.id }
+    end
+
+    context 'when is successfully destroyed' do
+      it 'should be destroy purchase order' do
+        expect(response).to have_http_status(:accepted)
+      end
+
+      it 'should be return a JSON message' do
+        expect(JSON.parse(response.body)['message']).to eq('Purchase order destroyed successfully.')
+      end
+    end
+
+    context 'when is not sucessfully destroyed' do
+      it 'should be a invalid purchase order' do
+        purchase_order.customer_id = nil
+        purchase_order.valid?
+
+        expect(purchase_order).to_not be_valid
+      end
+    end
+  end
 end
