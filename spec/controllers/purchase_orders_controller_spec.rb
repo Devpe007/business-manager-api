@@ -7,9 +7,58 @@ RSpec.describe PurchaseOrdersController, type: :controller do
   let(:valid_headers) { { 'Authorization' => "Bearer #{valid_token}" } }
   let(:invalid_headers) { { 'Authorization' => 'Bearer invalid_token' } }
 
-  describe 'POST #create' do
-    let(:purchase_order) { create(:purchase_order) }
+  let(:purchase_order) { create(:purchase_order) }
 
+  describe 'GET #show' do
+    before do
+      request.headers.merge!(valid_headers)
+
+      get :show, params: {
+        id: purchase_order.id
+      }
+    end
+
+    context 'when is successfully showed' do
+      it 'should be valid purchase order' do
+        expect(purchase_order).to be_valid
+      end
+
+      it 'should be return a JSON with product data' do
+        response_json = JSON.parse(response.body)
+
+        expect(response_json['id']).to eq(purchase_order.id)
+        expect(response_json['user_id']).to eq(purchase_order.user_id)
+        expect(response_json['customer_id']).to eq(purchase_order.customer_id)
+        expect(response_json['product_id']).to eq(purchase_order.product_id)
+        expect(response_json['quantity']).to eq(purchase_order.quantity)
+        expect(response_json['description']).to eq(purchase_order.description)
+      end
+
+      it 'should be an existing purchase order' do
+        expect(request.params[:id]).to eq(purchase_order.id.to_s)
+      end
+    end
+
+    context 'when is not successfully showed' do
+      it 'should not be valid purchase order' do
+        purchase_order.customer_id = nil
+        purchase_order.valid?
+
+        expect(purchase_order).to_not be_valid
+      end
+
+      it 'should be return a JSON with message when the purchase order not exists' do
+        get :show, params: {
+          id: '123123123'
+        }
+
+        expect(request.params[:id]).to_not eq(purchase_order.id.to_s)
+        expect(JSON.parse(response.body)['message']).to eq('This purchase order does not exists.')
+      end
+    end
+  end
+
+  describe 'POST #create' do
     before do
       request.headers.merge!(valid_headers)
 
@@ -47,8 +96,6 @@ RSpec.describe PurchaseOrdersController, type: :controller do
   end
 
   describe 'PUT #update' do
-    let(:purchase_order) { create(:purchase_order) }
-
     before do
       request.headers.merge!(valid_headers)
 
@@ -91,12 +138,19 @@ RSpec.describe PurchaseOrdersController, type: :controller do
 
         expect(purchase_order).to_not be_valid
       end
+
+      it 'should be return a JSON with message when the purchase order not exists' do
+        get :show, params: {
+          id: '123123123'
+        }
+
+        expect(request.params[:id]).to_not eq(purchase_order.id.to_s)
+        expect(JSON.parse(response.body)['message']).to eq('This purchase order does not exists.')
+      end
     end
   end
 
   describe 'DELETE #destroy' do
-    let(:purchase_order) { create(:purchase_order) }
-
     before do
       request.headers.merge!(valid_headers)
 
@@ -119,6 +173,15 @@ RSpec.describe PurchaseOrdersController, type: :controller do
         purchase_order.valid?
 
         expect(purchase_order).to_not be_valid
+      end
+
+      it 'should be return a JSON with message when the purchase order not exists' do
+        get :show, params: {
+          id: '123123123'
+        }
+
+        expect(request.params[:id]).to_not eq(purchase_order.id.to_s)
+        expect(JSON.parse(response.body)['message']).to eq('This purchase order does not exists.')
       end
     end
   end
