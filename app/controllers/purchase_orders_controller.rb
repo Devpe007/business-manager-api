@@ -1,6 +1,12 @@
 class PurchaseOrdersController < ApplicationController
   before_action :load_purchase_order, only: %i[show update destroy]
 
+  def index
+    @purchase_orders = PurchaseOrder.where(user_id: current_user.id)
+
+    render json: @purchase_orders
+  end
+
   def show
     render json: @purchase_order
   end
